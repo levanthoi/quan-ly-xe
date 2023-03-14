@@ -22,7 +22,8 @@
       content: "*";
       color: red;
     }
-    .valid-feedback-email {
+    .valid-feedback-email,
+    .valid-feedback-phone {
       color: red;
     }
   </style>
@@ -111,7 +112,7 @@
                 name="phone"
                 required
               />
-              <div class="valid-feedback">Looks good!</div>
+              <div class="valid-feedback-phone">Số điện thoại không hợp lệ</div>
             </div>
             <!-- Email -->
             <div class="col-md-12 required">
@@ -168,6 +169,7 @@
       let data = [];
       let rowSelected = null;
       $(".valid-feedback-email").hide();
+      $(".valid-feedback-phone").hide();
 
       function isEmail(email) {
         var regex =
@@ -272,7 +274,12 @@
         if (!isEmail(getValue().email)) {
           console.log("isemail");
           $(".valid-feedback-email").show();
+        } else if (!isNumber(getValue().phone)) {
+          console.log("isphonw");
+          $(".valid-feedback-email").hide();
+          $(".valid-feedback-phone").show();
         } else {
+          $(".valid-feedback-phone").hide();
           if (!rowSelected) data.push(getValue());
           else
             data = data?.map((item) =>
