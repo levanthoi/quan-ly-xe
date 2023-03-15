@@ -182,6 +182,24 @@
         return regex.test(phone);
       }
 
+      // validate
+      const validate = () => {
+        let isValid = true;
+        if (!isEmail(getValue().email)) {
+          console.log("isemail");
+          isValid = false;
+          $(".valid-feedback-email").show();
+        } else {
+          $(".valid-feedback-email").hide();
+        }
+        if (!isNumber(getValue().phone)) {
+          console.log("isphone");
+          isValid = false;
+          $(".valid-feedback-phone").show();
+        } else $(".valid-feedback-phone").hide();
+        return isValid;
+      };
+
       // lấy dữ liệu
       const getValue = () => {
         let objValue = {};
@@ -197,7 +215,6 @@
 
         objValue[$(valSelect).attr("name")] = $(valSelect).val();
         objValue[valTextarea.attr("name")] = $(valTextarea).val();
-        objValue.id = data.length + 1;
         return objValue;
       };
 
@@ -220,10 +237,10 @@
         if ($table.length) {
           $table.empty();
         }
-        data?.forEach((item) =>
+        data?.forEach((item, index) =>
           $(".table >tbody").append(`
         <tr onclick="update(${item.id})">
-                <th scope="row">${item?.id}</th>
+                <th scope="row">${index + 1}</th>
                 <td>${item?.image}</td>
                 <td>${item?.name}</td>
                 <td>${item?.company}</td>
@@ -271,15 +288,8 @@
       // submit
       $("form").submit(function (e) {
         e.preventDefault();
-        if (!isEmail(getValue().email)) {
-          console.log("isemail");
-          $(".valid-feedback-email").show();
-        } else if (!isNumber(getValue().phone)) {
-          console.log("isphonw");
-          $(".valid-feedback-email").hide();
-          $(".valid-feedback-phone").show();
-        } else {
-          $(".valid-feedback-phone").hide();
+        // check validate trước khi push
+        if (validate()) {
           if (!rowSelected) data.push(getValue());
           else
             data = data?.map((item) =>
